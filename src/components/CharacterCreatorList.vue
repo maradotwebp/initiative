@@ -44,6 +44,7 @@ const emit = defineEmits<{
           </template>
         </Character>
       </TransitionGroup>
+      <div v-if="!characters?.length" class="empty-list-info">No characters yet</div>
     </div>
   </div>
 </template>
@@ -67,6 +68,14 @@ const emit = defineEmits<{
 
 .list > * + * {
   margin-top: .8em;
+}
+
+.empty-list-info {
+  font-size: 0.8em;
+  font-style: italic;
+  margin: auto;
+  width: fit-content;
+  color: #000000aa;
 }
 
 .list-move,
