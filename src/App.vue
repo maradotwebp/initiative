@@ -11,6 +11,7 @@ const enemies = ref<ICharacter[]>([]);
 function addCharacter(arr: Ref<ICharacter[]>, name: string) {
   arr.value.push({
     name,
+    initiative: 10,
     hp: { current: 4, max: 4 }
   });
 }

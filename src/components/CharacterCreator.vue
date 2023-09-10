@@ -21,7 +21,10 @@ function toggleTray() {
 <template>
   <div class="wrapper">
     <Box class="character">
-      <Input class="name-input" maxlength="20" v-model="character.name" />
+      <div class="left">
+        <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" />
+        <Input class="name-input" maxlength="10" v-model="character.name" />
+      </div>
       <div class="right">
         <div class="hp">
           <Input class="hp-input" type="number" min="0" max="999" placeholder="cur" v-model="character.hp.current" />
@@ -76,8 +79,20 @@ function toggleTray() {
   z-index: -1;
 }
 
+.left {
+  display: flex;
+  gap: 0.4em;
+}
+
+.initiative-input {
+  width: 3ch;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
 .name-input {
   align-self: stretch;
+  max-width: 18ch;
 }
 
 .actions {
