@@ -2,26 +2,42 @@
 import Input from "./Input.vue";
 import { ICharacter } from "../core/character.ts";
 import Box from "./Box.vue";
+import {ref} from "vue";
+import IconButton from "./IconButton.vue";
+import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
 const x = defineProps<{
   character: ICharacter
 }>();
+
+const trayOpen = ref(false);
+
+function toggleTray() {
+  trayOpen.value = !trayOpen.value;
+}
 </script>
 
 <template>
   <div class="wrapper">
     <Box class="character">
       <Input class="name-input" maxlength="20" v-model="character.name" />
-      <div class="hp">
-        <Input class="hp-input" type="number" min="0" max="999" placeholder="cur" v-model="character.hp.current" />
-        /
-        <Input class="hp-input" type="number" min="0" max="999" placeholder="max" v-model="character.hp.max" />
-        HP
+      <div class="right">
+        <div class="hp">
+          <Input class="hp-input" type="number" min="0" max="999" placeholder="cur" v-model="character.hp.current" />
+          /
+          <Input class="hp-input" type="number" min="0" max="999" placeholder="max" v-model="character.hp.max" />
+          HP
+        </div>
+        <IconButton @click="toggleTray">
+          <EllipsisVerticalIcon />
+        </IconButton>
       </div>
     </Box>
-    <Box class="actions">
-      <slot name="actions" />
-    </Box>
+    <Transition>
+      <Box v-show="trayOpen" class="actions">
+        <slot name="actions" />
+      </Box>
+    </Transition>
   </div>
 </template>
 
@@ -42,6 +58,8 @@ const x = defineProps<{
   align-items: end;
   background: #f9f9f9;
   padding: 0.5em 0.5em;
+
+  z-index: 2;
 }
 
 .name-input {
@@ -56,12 +74,27 @@ const x = defineProps<{
   margin: 0 0.6em;
 }
 
+.right {
+  display: flex;
+  gap: 1em;
+}
+
 .hp {
   font-style: italic;
 }
 
 .hp-input {
   width: 5ch;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: transform 0.125s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  transform: translateY(-2em);
 }
 
 @media screen and (min-width: 720px) {
