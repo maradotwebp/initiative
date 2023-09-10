@@ -6,6 +6,7 @@ import IconButton from "./IconButton.vue";
 
 defineProps<{
   characters?: ICharacter[]
+  bgIconUrl?: string
 }>();
 
 const emit = defineEmits<{
@@ -30,10 +31,7 @@ const emit = defineEmits<{
 
     <div class="list">
       <TransitionGroup name="list">
-        <Character v-for="character in characters" :key="character" :character="character">
-          <template #icon>
-            <slot name="icon" />
-          </template>
+        <Character v-for="character in characters" :key="character" :character="character" :bgIconUrl="bgIconUrl">
           <template #actions>
             <div class="actions">
               <IconButton title="Copy" @click="emit('copy', character)">

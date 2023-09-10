@@ -8,6 +8,7 @@ import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
 const x = defineProps<{
   character: ICharacter
+  bgIconUrl?: string
 }>();
 
 const trayOpen = ref(false);
@@ -20,10 +21,7 @@ function toggleTray() {
 <template>
   <div class="wrapper">
     <Box class="character">
-      <div class="left">
-        <slot name="icon" />
-        <Input class="name-input" maxlength="20" v-model="character.name" />
-      </div>
+      <Input class="name-input" maxlength="20" v-model="character.name" />
       <div class="right">
         <div class="hp">
           <Input class="hp-input" type="number" min="0" max="999" placeholder="cur" v-model="character.hp.current" />
@@ -35,6 +33,7 @@ function toggleTray() {
           <EllipsisVerticalIcon />
         </IconButton>
       </div>
+      <img v-if="bgIconUrl" class="bg-icon" :src="bgIconUrl" />
     </Box>
     <Transition>
       <Box v-show="trayOpen" class="actions">
@@ -54,15 +53,26 @@ function toggleTray() {
 .character {
   align-self: stretch;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1em;
   justify-content: space-between;
-  align-items: end;
+  align-items: stretch;
   background: #f9f9f9;
   padding: 0.5em 0.5em;
 
   z-index: 2;
+
+  overflow: hidden;
+}
+
+.bg-icon {
+  position: absolute;
+  opacity: 10%;
+  height: 10em;
+  top: calc(50% - 5em);
+  left: calc(50% - 5em);
 }
 
 .name-input {
@@ -77,13 +87,9 @@ function toggleTray() {
   margin: 0 0.6em;
 }
 
-.left {
-  display: flex;
-  gap: .4em;
-  align-items: center;
-}
-
 .right {
+  align-self: end;
+
   display: flex;
   gap: 1em;
   align-items: center;
@@ -111,6 +117,12 @@ function toggleTray() {
   .character {
     flex-direction: row;
     align-items: stretch;
+  }
+
+  .bg-icon {
+    height: 6em;
+    top: calc(50% - 3em);
+    left: calc(50% - 3em);
   }
 }
 </style>

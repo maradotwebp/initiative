@@ -23,7 +23,7 @@ input {
   font: inherit;
   border: 0;
   padding: .2em .6em;
-  background: #41403E11;
+  background: #ececec;
 
   border-top-left-radius: 15px 255px;
   border-top-right-radius: 225px 15px;

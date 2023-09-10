@@ -34,19 +34,25 @@ const copyEnemy = (char: ICharacter) => copyCharacter(enemies, char);
 
 <template>
   <div class="main">
-    <CharacterList :characters="heroes" @add="addHero" @delete="deleteHero" @copy="copyHero">
-      <template #icon>
-        <img class="icon" :src="broadswordUrl" />
-      </template>
+    <CharacterList
+      :characters="heroes"
+      :bgIconUrl="broadswordUrl"
+      @add="addHero"
+      @delete="deleteHero"
+      @copy="copyHero"
+    >
       <template #title>
         <h1>The glorious heroes</h1>
       </template>
     </CharacterList>
 
-    <CharacterList :characters="enemies" @add="addEnemy" @delete="deleteEnemy" @copy="copyEnemy">
-      <template #icon>
-        <img class="icon" :src="macheteUrl" />
-      </template>
+    <CharacterList
+      :characters="enemies"
+      :bgIconUrl="macheteUrl"
+      @add="addEnemy"
+      @delete="deleteEnemy"
+      @copy="copyEnemy"
+    >
       <template #title>
         <h1>The despicable enemies</h1>
       </template>
@@ -68,9 +74,5 @@ const copyEnemy = (char: ICharacter) => copyCharacter(enemies, char);
 h1 {
   font-size: 1.2em;
   margin: 0;
-}
-
-.icon {
-  height: 1.4em;
 }
 </style>
