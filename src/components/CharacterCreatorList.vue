@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { ICharacter as ICharacter } from "../core/character.ts";
-import Character from "./Character.vue";
-import { PlusIcon } from '@heroicons/vue/20/solid';
+import Character from "./CharacterCreator.vue";
+import { PlusIcon, TrashIcon } from '@heroicons/vue/20/solid';
+import IconButton from "./IconButton.vue";
 
 defineProps<{
   characters?: ICharacter[]
@@ -9,21 +10,28 @@ defineProps<{
 
 const emit = defineEmits<{
   add: []
+  delete: [character: ICharacter]
 }>();
 </script>
 
 <template>
   <div>
     <div class="icons">
-      <button class="icon-button" @click="emit('add')">
+      <IconButton title="Add" @click="emit('add')">
         <PlusIcon />
-      </button>
+      </IconButton>
     </div>
 
     <hr class="divider" />
 
     <div class="list">
-      <Character v-for="character in characters" :character="character" />
+      <Character v-for="character in characters" :character="character">
+        <template #actions>
+          <IconButton title="Delete" @click="emit('delete', character)">
+            <TrashIcon />
+          </IconButton>
+        </template>
+      </Character>
     </div>
   </div>
 </template>
@@ -32,25 +40,6 @@ const emit = defineEmits<{
 .icons {
   display: flex;
   justify-content: end;
-}
-
-.icon-button {
-  height: 2em;
-  width: 2em;
-  color: #333333;
-  background-color: inherit;
-  border: 0;
-  padding: .4em;
-  cursor: pointer;
-  transition: transform 120ms;
-}
-
-.icon-button:hover {
-  transform: rotateZ(10deg) scale(110%);
-}
-
-.icon-button:hover {
-  color: black;
 }
 
 .divider {

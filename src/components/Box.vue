@@ -1,0 +1,15 @@
+<template>
+  <div>
+    <slot />
+  </div>
+</template>
+
+<style scoped>
+div {
+  border: solid 3px #41403E;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  border-bottom-right-radius: 225px 15px;
+  border-bottom-left-radius: 15px 255px;
+}
+</style>
