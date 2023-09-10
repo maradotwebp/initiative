@@ -31,6 +31,9 @@ const emit = defineEmits<{
     <div class="list">
       <TransitionGroup name="list">
         <Character v-for="character in characters" :key="character" :character="character">
+          <template #icon>
+            <slot name="icon" />
+          </template>
           <template #actions>
             <div class="actions">
               <IconButton title="Copy" @click="emit('copy', character)">

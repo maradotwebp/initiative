@@ -2,6 +2,8 @@
 import {Ref, ref} from "vue";
 import type { ICharacter as ICharacter } from "./core/character.ts";
 import CharacterList from "./components/CharacterCreatorList.vue";
+import broadswordUrl from "./assets/broadsword.svg";
+import macheteUrl from "./assets/machete.svg";
 
 const heroes = ref<ICharacter[]>([]);
 const enemies = ref<ICharacter[]>([]);
@@ -33,12 +35,18 @@ const copyEnemy = (char: ICharacter) => copyCharacter(enemies, char);
 <template>
   <div class="main">
     <CharacterList :characters="heroes" @add="addHero" @delete="deleteHero" @copy="copyHero">
+      <template #icon>
+        <img class="icon" :src="broadswordUrl" />
+      </template>
       <template #title>
         <h1>The glorious heroes</h1>
       </template>
     </CharacterList>
 
     <CharacterList :characters="enemies" @add="addEnemy" @delete="deleteEnemy" @copy="copyEnemy">
+      <template #icon>
+        <img class="icon" :src="macheteUrl" />
+      </template>
       <template #title>
         <h1>The despicable enemies</h1>
       </template>
@@ -51,10 +59,18 @@ const copyEnemy = (char: ICharacter) => copyCharacter(enemies, char);
   max-width: 60ch;
   margin: auto;
   padding: 1.2em 0.6em;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3.2em;
 }
 
 h1 {
   font-size: 1.2em;
   margin: 0;
+}
+
+.icon {
+  height: 1.4em;
 }
 </style>
