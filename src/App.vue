@@ -18,21 +18,27 @@ function deleteCharacter(arr: Ref<ICharacter[]>, character: ICharacter) {
   arr.value.splice(idx, 1);
 }
 
+function copyCharacter(arr: Ref<ICharacter[]>, character: ICharacter) {
+  arr.value.push({ ...character });
+}
+
 const addHero = () => addCharacter(heroes, "Hero");
 const addEnemy = () => addCharacter(enemies, "Enemy");
 const deleteHero = (char: ICharacter) => deleteCharacter(heroes, char);
 const deleteEnemy = (char: ICharacter) => deleteCharacter(enemies, char);
+const copyHero = (char: ICharacter) => copyCharacter(heroes, char);
+const copyEnemy = (char: ICharacter) => copyCharacter(enemies, char);
 </script>
 
 <template>
   <div class="main">
-    <CharacterList :characters="heroes" @add="addHero" @delete="deleteHero">
+    <CharacterList :characters="heroes" @add="addHero" @delete="deleteHero" @copy="copyHero">
       <template #title>
         <h1>The glorious heroes</h1>
       </template>
     </CharacterList>
 
-    <CharacterList :characters="enemies" @add="addEnemy" @delete="deleteEnemy">
+    <CharacterList :characters="enemies" @add="addEnemy" @delete="deleteEnemy" @copy="copyEnemy">
       <template #title>
         <h1>The despicable enemies</h1>
       </template>

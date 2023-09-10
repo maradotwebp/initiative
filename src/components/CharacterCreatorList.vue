@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ICharacter as ICharacter } from "../core/character.ts";
 import Character from "./CharacterCreator.vue";
-import { PlusIcon, TrashIcon } from '@heroicons/vue/20/solid';
+import { PlusIcon, TrashIcon, DocumentDuplicateIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
 
 defineProps<{
@@ -11,6 +11,7 @@ defineProps<{
 const emit = defineEmits<{
   add: []
   delete: [character: ICharacter]
+  copy: [character: ICharacter]
 }>();
 </script>
 
@@ -32,6 +33,9 @@ const emit = defineEmits<{
         <Character v-for="character in characters" :key="character" :character="character">
           <template #actions>
             <div class="actions">
+              <IconButton title="Copy" @click="emit('copy', character)">
+                <DocumentDuplicateIcon />
+              </IconButton>
               <IconButton title="Delete" @click="emit('delete', character)">
                 <TrashIcon />
               </IconButton>
