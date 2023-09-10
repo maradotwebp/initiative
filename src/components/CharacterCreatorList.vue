@@ -3,8 +3,9 @@ import type { ICharacter as ICharacter } from "../core/character.ts";
 import Character from "./CharacterCreator.vue";
 import { PlusIcon, TrashIcon, DocumentDuplicateIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
+import {computed} from "vue";
 
-defineProps<{
+const props = defineProps<{
   characters?: ICharacter[]
   bgIconUrl?: string
 }>();
@@ -14,6 +15,12 @@ const emit = defineEmits<{
   delete: [character: ICharacter]
   copy: [character: ICharacter]
 }>();
+
+const sortedCharacters = computed(() => {
+  const arr = [...props.characters];
+  arr.sort((a, b) => b.initiative - a.initiative);
+  return arr;
+});
 </script>
 
 <template>
@@ -31,7 +38,7 @@ const emit = defineEmits<{
 
     <div class="list">
       <TransitionGroup name="list">
-        <Character v-for="character in characters" :key="character" :character="character" :bgIconUrl="bgIconUrl">
+        <Character v-for="character in sortedCharacters" :key="character" :character="character" :bgIconUrl="bgIconUrl">
           <template #actions>
             <div class="actions">
               <IconButton title="Copy" @click="emit('copy', character)">

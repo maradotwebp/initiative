@@ -16,13 +16,20 @@ const trayOpen = ref(false);
 function toggleTray() {
   trayOpen.value = !trayOpen.value;
 }
+
+function refocus(evt: InputEvent) {
+  setTimeout(() => {
+    (evt.target as HTMLInputElement).focus();
+  });
+}
+
 </script>
 
 <template>
   <div class="wrapper">
     <Box class="character">
       <div class="left">
-        <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" />
+        <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" @input="refocus" />
         <Input class="name-input" maxlength="10" v-model="character.name" />
       </div>
       <div class="right">
@@ -85,7 +92,7 @@ function toggleTray() {
 }
 
 .initiative-input {
-  width: 3ch;
+  width: 3.2ch;
   font-size: 1.3em;
   font-weight: bold;
 }
