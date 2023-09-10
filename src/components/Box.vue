@@ -6,7 +6,7 @@
 
 <style scoped>
 div {
-  border: solid 3px #41403E;
+  border: solid 3px #41403Ecc;
   border-top-left-radius: 255px 15px;
   border-top-right-radius: 15px 225px;
   border-bottom-right-radius: 225px 15px;
