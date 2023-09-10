@@ -73,6 +73,7 @@ function toggleTray() {
   height: 10em;
   top: calc(50% - 5em);
   left: calc(50% - 5em);
+  z-index: -1;
 }
 
 .name-input {

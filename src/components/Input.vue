@@ -32,7 +32,7 @@ input {
 }
 
 input:hover {
-  background: #41403E22;
+  background: #e0e0e0;
 }
 
 input:focus {
