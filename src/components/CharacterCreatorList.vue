@@ -16,10 +16,13 @@ const emit = defineEmits<{
 
 <template>
   <div>
-    <div class="icons">
-      <IconButton title="Add" @click="emit('add')">
-        <PlusIcon />
-      </IconButton>
+    <div class="title">
+      <slot name="title" />
+      <div>
+        <IconButton title="Add" @click="emit('add')">
+          <PlusIcon />
+        </IconButton>
+      </div>
     </div>
 
     <hr class="divider" />
@@ -28,9 +31,11 @@ const emit = defineEmits<{
       <TransitionGroup name="list">
         <Character v-for="character in characters" :key="character" :character="character">
           <template #actions>
-            <IconButton title="Delete" @click="emit('delete', character)">
-              <TrashIcon />
-            </IconButton>
+            <div class="actions">
+              <IconButton title="Delete" @click="emit('delete', character)">
+                <TrashIcon />
+              </IconButton>
+            </div>
           </template>
         </Character>
       </TransitionGroup>
@@ -39,9 +44,11 @@ const emit = defineEmits<{
 </template>
 
 <style scoped>
-.icons {
+.title {
   display: flex;
-  justify-content: end;
+  gap: 1em;
+  align-items: end;
+  justify-content: space-between;
 }
 
 .divider {
@@ -79,5 +86,10 @@ const emit = defineEmits<{
 .list-leave-active {
   position: absolute;
   width: min(calc(100vw - 1.2em), 60ch);
+}
+
+.actions {
+  display: flex;
+  gap: 0.2em;
 }
 </style>

@@ -26,13 +26,17 @@ const deleteEnemy = (char: ICharacter) => deleteCharacter(enemies, char);
 
 <template>
   <div class="main">
-    <p>The glorious heroes</p>
+    <CharacterList :characters="heroes" @add="addHero" @delete="deleteHero">
+      <template #title>
+        <h1>The glorious heroes</h1>
+      </template>
+    </CharacterList>
 
-    <CharacterList :characters="heroes" @add="addHero" @delete="deleteHero" />
-
-    <p>The despicable enemies</p>
-
-    <CharacterList :characters="enemies" @add="addEnemy" @delete="deleteEnemy" />
+    <CharacterList :characters="enemies" @add="addEnemy" @delete="deleteEnemy">
+      <template #title>
+        <h1>The despicable enemies</h1>
+      </template>
+    </CharacterList>
   </div>
 </template>
 
@@ -41,5 +45,10 @@ const deleteEnemy = (char: ICharacter) => deleteCharacter(enemies, char);
   max-width: 60ch;
   margin: auto;
   padding: 1.2em 0.6em;
+}
+
+h1 {
+  font-size: 1.2em;
+  margin: 0;
 }
 </style>
