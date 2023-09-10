@@ -25,13 +25,15 @@ const emit = defineEmits<{
     <hr class="divider" />
 
     <div class="list">
-      <Character v-for="character in characters" :character="character">
-        <template #actions>
-          <IconButton title="Delete" @click="emit('delete', character)">
-            <TrashIcon />
-          </IconButton>
-        </template>
-      </Character>
+      <TransitionGroup name="list">
+        <Character v-for="character in characters" :key="character" :character="character">
+          <template #actions>
+            <IconButton title="Delete" @click="emit('delete', character)">
+              <TrashIcon />
+            </IconButton>
+          </template>
+        </Character>
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -53,5 +55,29 @@ const emit = defineEmits<{
 
 .list > * + * {
   margin-top: .8em;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.125s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+
+.list-enter-from {
+  transform: translateX(-10px);
+}
+
+.list-leave-to {
+  transform: translateX(10px);
+}
+
+.list-leave-active {
+  position: absolute;
+  width: min(calc(100vw - 1.2em), 60ch);
 }
 </style>
