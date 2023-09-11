@@ -6,9 +6,16 @@ import {ref} from "vue";
 import IconButton from "./IconButton.vue";
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
+import broadswordUrl from "../assets/broadsword.svg";
+import macheteUrl from "../assets/machete.svg";
+
+const bg: Record<ICharacter['type'], string> = {
+  "sword": broadswordUrl,
+  "machete": macheteUrl
+};
+
 const x = defineProps<{
   character: ICharacter
-  bgIconUrl?: string
 }>();
 
 const trayOpen = ref(false);
@@ -22,7 +29,6 @@ function refocus(evt: InputEvent) {
     (evt.target as HTMLInputElement).focus();
   });
 }
-
 </script>
 
 <template>
@@ -43,7 +49,7 @@ function refocus(evt: InputEvent) {
           <EllipsisVerticalIcon />
         </IconButton>
       </div>
-      <img v-if="bgIconUrl" class="bg-icon" :src="bgIconUrl" />
+      <img class="bg-icon" :src="bg[character.type]" />
     </Box>
     <Transition>
       <Box v-show="trayOpen" class="actions">

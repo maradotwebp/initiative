@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import type { ICharacter as ICharacter } from "../core/character.ts";
-import Character from "./CharacterCreator.vue";
+import Character from "./Character.vue";
 import { PlusIcon, TrashIcon, DocumentDuplicateIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
 import {computed} from "vue";
 
 const props = defineProps<{
-  characters?: ICharacter[]
-  bgIconUrl?: string
+  characters: ICharacter[]
 }>();
 
 const emit = defineEmits<{
@@ -26,12 +25,10 @@ const sortedCharacters = computed(() => {
 <template>
   <div>
     <div class="title">
-      <slot name="title" />
-      <div>
-        <IconButton title="Add" @click="emit('add')">
-          <PlusIcon />
-        </IconButton>
-      </div>
+      <div>---</div>
+      <IconButton title="Add" @click="emit('add')">
+        <PlusIcon />
+      </IconButton>
     </div>
 
     <hr class="divider" />
@@ -111,6 +108,6 @@ const sortedCharacters = computed(() => {
 
 .actions {
   display: flex;
-  gap: 0.2em;
+  gap: .1em;
 }
 </style>
