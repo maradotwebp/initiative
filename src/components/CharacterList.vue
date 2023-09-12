@@ -64,6 +64,14 @@ function forward() {
     emit('changelog', { msg: "All done! Stopped the fight.", children: [] });
   }
 }
+
+function deleteCharacter(character: CharacterState) {
+  // If the character to delete is the current character, forward
+  if(tracker.value.currentCharacter?.id === character.id) {
+    forward();
+  }
+  emit('delete', character);
+}
 </script>
 
 <template>
@@ -101,7 +109,7 @@ function forward() {
               <IconButton title="Copy" @click="emit('copy', character)">
                 <DocumentDuplicateIcon />
               </IconButton>
-              <IconButton title="Delete" @click="emit('delete', character)">
+              <IconButton title="Delete" @click="deleteCharacter(character)">
                 <TrashIcon />
               </IconButton>
             </div>
