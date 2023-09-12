@@ -100,7 +100,7 @@ function deleteCharacter(character: CharacterState) {
       <TransitionGroup name="list">
         <Character
           v-for="character in sortedCharacters"
-          :key="character"
+          :key="character.id"
           :character="character"
           :darkMode="tracker.currentCharacter?.id === character.id"
         >
