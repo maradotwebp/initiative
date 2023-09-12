@@ -36,7 +36,9 @@ function toggleInFight() {
   } else {
     tracker.value = startedFight(sortedCharacters.value);
     charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
-    emit('changelog', { msg: "Onwards to victory! Started the fight.", children: [] });
+    if(tracker.value.inFight) {
+      emit('changelog', { msg: "Onwards to victory! Started the fight.", children: [] });
+    }
   }
 }
 
@@ -98,7 +100,9 @@ function forward() {
           </template>
         </Character>
       </TransitionGroup>
-      <div v-if="!characters?.length" class="empty-list-info">No characters yet</div>
+      <div v-if="!characters?.length" class="empty-list-info">
+        No characters yet. Click the plus button to add one!
+      </div>
     </div>
   </div>
 </template>
