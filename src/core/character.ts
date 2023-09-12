@@ -1,7 +1,7 @@
 export interface ICharacter {
   name: string;
   initiative: number;
-  type: "sword" | "machete";
+  type: "axe" | "bow" | "club" | "dagger" | "machete" | "sword" | "wand";
   hp: {
     current: number;
     max: number;

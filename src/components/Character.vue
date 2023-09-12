@@ -6,16 +6,26 @@ import {computed, ref} from "vue";
 import IconButton from "./IconButton.vue";
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
-import broadswordUrl from "../assets/broadsword.svg";
-import macheteUrl from "../assets/machete.svg";
-
 const props = defineProps<{
   character: ICharacter
 }>();
 
+import axeUrl from "../assets/axe.svg";
+import bowUrl from "../assets/bow.svg";
+import clubUrl from "../assets/club.svg";
+import daggerUrl from "../assets/dagger.svg";
+import macheteUrl from "../assets/machete.svg";
+import swordUrl from "../assets/sword.svg";
+import wandUrl from "../assets/wand.svg";
+
 const bg: Record<ICharacter['type'], string> = {
-  "sword": broadswordUrl,
-  "machete": macheteUrl
+  "axe": axeUrl,
+  "bow": bowUrl,
+  "club": clubUrl,
+  "dagger": daggerUrl,
+  "machete": macheteUrl,
+  "sword": swordUrl,
+  "wand": wandUrl
 };
 const bgImage = computed(() => bg[props.character.type]);
 const characterTypes = Object.keys(bg) as ICharacter['type'][];
@@ -61,7 +71,7 @@ function switchType() {
     </Box>
     <Transition>
       <Box v-show="trayOpen" class="actions">
-        <IconButton title="Switch Type" @click="switchType">
+        <IconButton title="Switch Weapon" @click="switchType">
           <img :src="bgImage" />
         </IconButton>
         <slot name="actions" />
