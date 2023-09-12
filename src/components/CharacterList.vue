@@ -31,6 +31,7 @@ const charactersBeforeEndOfTurn = ref<CharacterState[]>(structuredClone(toRawDee
 function toggleInFight() {
   if(tracker.value.inFight) {
     tracker.value = stoppedFight();
+    emit('changelog', { msg: "All done! Stopped the fight.", children: [] });
   } else {
     tracker.value = startedFight(sortedCharacters.value);
     charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
@@ -65,7 +66,7 @@ function forward() {
           <PlayIcon v-if="!tracker.inFight" />
           <StopIcon v-else />
         </IconButton>
-        <IconButton title="Next" :disabled="!tracker.inFight" @click="forward">
+        <IconButton title="Next / End turn" :disabled="!tracker.inFight" @click="forward">
           <ForwardIcon />
         </IconButton>
       </div>
