@@ -34,7 +34,11 @@ export function compileChangelogChildren(before: CharacterState[], after: Charac
     }
 
     if(beforeChar.note !== afterChar.note) {
-      messages.push(`${afterChar.name} changed note to '${afterChar.note}'.`);
+      if(afterChar.note) {
+        messages.push(`${afterChar.name} changed note to '${afterChar.note}'.`);
+      } else {
+        messages.push(`${afterChar.name} deleted their note.`);
+      }
     }
 
     if(beforeChar.initiative !== afterChar.initiative) {
