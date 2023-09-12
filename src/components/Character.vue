@@ -114,7 +114,8 @@ const excludedFromInitiative = computed(() => isDead.value);
 }
 
 .character.dark {
-  filter: invert(90%);
+  background-color: #1e1e1e;
+  color: white;
 }
 
 .bg-icon {
@@ -127,7 +128,7 @@ const excludedFromInitiative = computed(() => isDead.value);
 }
 
 .dark .bg-icon {
-  color: white;
+  filter: invert();
 }
 
 .left {
@@ -154,6 +155,11 @@ const excludedFromInitiative = computed(() => isDead.value);
   left: -2px;
   background-color: #fc4c4c;
 }
+
+.dark .initiative-wrapper .point {
+  background-color: #ad3535;
+}
+
 
 .name-input {
   align-self: stretch;
@@ -190,16 +196,16 @@ const excludedFromInitiative = computed(() => isDead.value);
   background-color: #ffd296;
 }
 
-.hp-input.warning:focus {
-  outline-color: #ffbb61;
+.dark .hp-input.warning {
+  background-color: #c59037;
 }
 
 .hp-input.alert {
   background-color: #ff9696;
 }
 
-.hp-input.alert:focus {
-  outline-color: #fc4c4c;
+.dark .hp-input.alert {
+  background-color: #ad3535;
 }
 
 .v-enter-active,

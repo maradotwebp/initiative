@@ -19,6 +19,10 @@ button:enabled {
   color: #333333;
 }
 
+.dark button:enabled {
+  color: #cccccc;
+}
+
 button:disabled {
   color: #888888;
 }
@@ -26,5 +30,9 @@ button:disabled {
 button:hover:enabled {
   transform: rotateZ(-3deg) scale(120%);
   color: black;
+}
+
+.dark button:hover:enabled {
+  color: white;
 }
 </style>

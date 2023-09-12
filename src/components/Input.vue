@@ -31,8 +31,17 @@ input {
   border-bottom-left-radius: 255px 15px;
 }
 
+.dark input {
+  background: #3d3d3d;
+  color: white;
+}
+
 input:hover {
   background: #e0e0e0;
+}
+
+.dark input:hover {
+  background: #656565;
 }
 
 input:focus {
