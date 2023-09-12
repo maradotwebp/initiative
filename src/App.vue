@@ -20,7 +20,12 @@ function deleteCharacter(character: CharacterState) {
 }
 
 function copyCharacter(character: CharacterState) {
-  characters.value.push({ ...character });
+  characters.value.push({
+    ...character,
+    hp: {
+      ...character.hp
+    },
+  });
 }
 
 const titles = [

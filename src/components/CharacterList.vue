@@ -42,6 +42,7 @@ function toggleInFight() {
 function startFight() {
   // Don't start if there's not enough characters
   if(sortedCharacters.value.length < 2) return;
+  if(sortedCharacters.value.every(c => c.hp.current === 0)) return;
 
   trackerState.inFight = true;
   trackerState.characters = {
@@ -58,24 +59,26 @@ function stopFight() {
 
 function backward() {
   if(!trackerState.inFight) return;
+  if(sortedCharacters.value.every(c => c.hp.current === 0)) return stopFight();
 
-  const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
-  const previous = sortedCharacters.value[(curIdx - 1 + sortedCharacters.value.length) % sortedCharacters.value.length];
-
-  trackerState.characters = {
-    cur: previous
-  };
+  let prev: CharacterState|undefined;
+  do {
+    const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
+    prev = sortedCharacters.value[(curIdx - 1 + sortedCharacters.value.length) % sortedCharacters.value.length];
+    trackerState.characters = { cur: prev };
+  } while(!prev || prev.hp.current === 0);
 }
 
 function forward() {
   if(!trackerState.inFight) return;
+  if(sortedCharacters.value.every(c => c.hp.current === 0)) return stopFight();
 
-  const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
-  const next = sortedCharacters.value[(curIdx + 1) % sortedCharacters.value.length];
-
-  trackerState.characters = {
-    cur: next
-  };
+  let next: CharacterState|undefined;
+  do {
+    const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
+    next = sortedCharacters.value[(curIdx + 1) % sortedCharacters.value.length];
+    trackerState.characters = { cur: next };
+  } while(!next || next.hp.current === 0);
 }
 </script>
 

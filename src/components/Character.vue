@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Input from "./Input.vue";
-import { CharacterState } from "../core/character.ts";
+import type { CharacterState } from "../core/character.ts";
 import Box from "./Box.vue";
 import {computed, ref} from "vue";
 import IconButton from "./IconButton.vue";
@@ -48,18 +48,26 @@ function switchType() {
   const nextIdx = (idx + 1) % characterTypes.length;
   props.character.type = characterTypes[nextIdx];
 }
+
+const isDead = computed(() => props.character.hp.current === 0);
+const isCloseToDeath = computed(() => !isDead.value && props.character.hp.current < (props.character.hp.max / 5));
+
+const excludedFromInitiative = computed(() => isDead.value);
 </script>
 
 <template>
   <div class="wrapper">
     <Box class="character" :class="{ dark: darkMode ?? false }">
       <div class="left">
-        <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" @input="refocus" />
+        <div class="initiative-wrapper">
+          <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" @input="refocus" />
+          <div v-if="excludedFromInitiative" class="point" title="Excluded from initiative"></div>
+        </div>
         <Input class="name-input" maxlength="20" v-model="character.name" />
       </div>
       <div class="right">
         <div class="hp">
-          <Input class="hp-input" type="number" min="0" max="999" placeholder="cur" v-model="character.hp.current" />
+          <Input class="hp-input" :class="{ warning: isCloseToDeath, alert: isDead }" type="number" min="0" max="999" placeholder="cur" v-model="character.hp.current" />
           /
           <Input class="hp-input" type="number" min="0" max="999" placeholder="max" v-model="character.hp.max" />
           HP
@@ -127,10 +135,24 @@ function switchType() {
   gap: 0.4em;
 }
 
+.initiative-wrapper {
+  position: relative;
+}
+
 .initiative-input {
   width: 3.2ch;
   font-size: 1.3em;
   font-weight: bold;
+}
+
+.initiative-wrapper .point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  bottom: -2px;
+  left: -2px;
+  background-color: #fc4c4c;
 }
 
 .name-input {
@@ -162,6 +184,22 @@ function switchType() {
 
 .hp-input {
   width: 5ch;
+}
+
+.hp-input.warning {
+  background-color: #ffd296;
+}
+
+.hp-input.warning:focus {
+  outline-color: #ffbb61;
+}
+
+.hp-input.alert {
+  background-color: #ff9696;
+}
+
+.hp-input.alert:focus {
+  outline-color: #fc4c4c;
 }
 
 .v-enter-active,
