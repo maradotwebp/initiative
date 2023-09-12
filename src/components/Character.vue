@@ -148,11 +148,11 @@ const excludedFromInitiative = computed(() => isDead.value);
 
 .initiative-wrapper .point {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 100%;
-  bottom: -2px;
-  left: -2px;
+  top: -4px;
+  right: -4px;
   background-color: #fc4c4c;
 }
 
