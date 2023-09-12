@@ -2,11 +2,15 @@
 import {useLocalStorage} from "./core/useLocalStorage.ts";
 import {CharacterState} from "./core/character.ts";
 import CharacterList from "./components/CharacterList.vue";
+import {genId} from "./core/id.ts";
+import {ChangelogEntry} from "./core/changelog.ts";
+import Changelog from "./components/Changelog.vue";
 
 const characters = useLocalStorage<CharacterState[]>("characters", []);
 
 function addCharacter() {
   characters.value.push({
+    id: genId(),
     name: "Character",
     type: "sword",
     initiative: 10,
@@ -22,10 +26,21 @@ function deleteCharacter(character: CharacterState) {
 function copyCharacter(character: CharacterState) {
   characters.value.push({
     ...character,
+    id: genId(),
     hp: {
       ...character.hp
     },
   });
+}
+
+const changelog = useLocalStorage<ChangelogEntry[]>("changelog", []);
+
+function addChangelogEntry(entry: ChangelogEntry) {
+  changelog.value = [entry, ...changelog.value];
+}
+
+function clearChangelog() {
+  changelog.value = [];
 }
 
 const titles = [
@@ -46,7 +61,9 @@ const title = titles[Math.floor(Math.random() * titles.length)];
       @add="addCharacter"
       @delete="deleteCharacter"
       @copy="copyCharacter"
+      @changelog="addChangelogEntry"
     />
+    <Changelog :changelog="changelog" @clear="clearChangelog" />
   </div>
 </template>
 

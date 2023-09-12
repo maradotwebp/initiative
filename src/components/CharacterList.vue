@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { CharacterState } from "../core/character.ts";
+import type { CharacterState } from "../core/character";
 import Character from "./Character.vue";
 import { PlusIcon, TrashIcon, DocumentDuplicateIcon, PlayIcon, StopIcon, BackwardIcon, ForwardIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
 import {computed, ref} from "vue";
 import {next, previous, startedFight, stoppedFight, TrackerState} from "../core/tracker.ts";
+import {ChangelogEntry, compileChangelogChildren} from "../core/changelog.ts";
+import {toRawDeep} from "../core/toRawDeep.ts";
 
 const props = defineProps<{
   characters: CharacterState[]
@@ -14,6 +16,7 @@ const emit = defineEmits<{
   add: []
   delete: [character: CharacterState]
   copy: [character: CharacterState]
+  changelog: [msg: ChangelogEntry]
 }>();
 
 const sortedCharacters = computed(() => {
@@ -23,17 +26,30 @@ const sortedCharacters = computed(() => {
 });
 
 const tracker = ref<TrackerState>(stoppedFight());
+const charactersBeforeEndOfTurn = ref<CharacterState[]>(structuredClone(toRawDeep(props.characters)));
 
 function toggleInFight() {
-  tracker.value = tracker.value.inFight ? stoppedFight() : startedFight(sortedCharacters.value);
+  if(tracker.value.inFight) {
+    tracker.value = stoppedFight();
+  } else {
+    tracker.value = startedFight(sortedCharacters.value);
+    charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
+  }
 }
 
 function backward() {
   tracker.value = previous(tracker.value, sortedCharacters.value);
+  emit('changelog', { msg: "Went back a turn.", children: [] });
 }
 
 function forward() {
+  const characterName = tracker.value.currentCharacter?.name;
   tracker.value = next(tracker.value, sortedCharacters.value);
+  const before = charactersBeforeEndOfTurn.value;
+  const after = props.characters;
+  const changelog = compileChangelogChildren(before, after);
+  emit('changelog', { msg: `${characterName} ended their turn.`, children: changelog });
+  charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
 }
 </script>
 

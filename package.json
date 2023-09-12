@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
+    "nanoid": "^4.0.2",
     "vue": "^3.3.4"
   },
   "devDependencies": {

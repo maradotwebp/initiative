@@ -1,4 +1,5 @@
 export interface CharacterState {
+  id: string;
   name: string;
   initiative: number;
   type: "axe" | "bow" | "club" | "dagger" | "machete" | "sword" | "wand";
