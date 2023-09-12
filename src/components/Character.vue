@@ -53,7 +53,7 @@ function switchType() {
 }
 
 const isDead = computed(() => props.character.hp.current === 0);
-const isCloseToDeath = computed(() => !isDead.value && props.character.hp.current < (props.character.hp.max / 5));
+const isCloseToDeath = computed(() => !isDead.value && props.character.hp.current <= (props.character.hp.max / 5));
 
 const excludedFromInitiative = computed(() => isDead.value);
 </script>
