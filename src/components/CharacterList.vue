@@ -7,6 +7,7 @@ import {computed, ref} from "vue";
 import {next, previous, startedFight, stoppedFight, TrackerState} from "../core/tracker.ts";
 import {ChangelogEntry, compileChangelogChildren} from "../core/changelog.ts";
 import {toRawDeep} from "../core/toRawDeep.ts";
+import {useLocalStorage} from "../core/useLocalStorage.ts";
 
 const props = defineProps<{
   characters: CharacterState[]
@@ -25,8 +26,8 @@ const sortedCharacters = computed(() => {
   return arr;
 });
 
-const tracker = ref<TrackerState>(stoppedFight());
-const charactersBeforeEndOfTurn = ref<CharacterState[]>(structuredClone(toRawDeep(props.characters)));
+const tracker = useLocalStorage<TrackerState>("tracker", stoppedFight());
+const charactersBeforeEndOfTurn = useLocalStorage<CharacterState[]>("charactersBefore", structuredClone(toRawDeep(props.characters)));
 
 function toggleInFight() {
   if(tracker.value.inFight) {
@@ -83,7 +84,7 @@ function forward() {
           v-for="character in sortedCharacters"
           :key="character"
           :character="character"
-          :darkMode="tracker.currentCharacter === character"
+          :darkMode="tracker.currentCharacter?.id === character.id"
         >
           <template #actions>
             <div class="actions">

@@ -19,7 +19,7 @@ function addCharacter() {
 }
 
 function deleteCharacter(character: CharacterState) {
-  const idx = characters.value.findIndex(char => char === character);
+  const idx = characters.value.findIndex(char => char.id === character.id);
   characters.value.splice(idx, 1);
 }
 

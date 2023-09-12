@@ -37,7 +37,7 @@ export function previous(state: TrackerState, characters: CharacterState[]): Tra
 
   let character = state.currentCharacter;
   do {
-    const curIdx = characters.findIndex(c => c === character);
+    const curIdx = characters.findIndex(c => c.id === character?.id);
     character = characters[(curIdx - 1 + characters.length) % characters.length];
   } while(!canAct(character));
 
@@ -56,7 +56,7 @@ export function next(state: TrackerState, characters: CharacterState[]): Tracker
 
   let character = state.currentCharacter;
   do {
-    const curIdx = characters.findIndex(c => c === character);
+    const curIdx = characters.findIndex(c => c.id === character?.id);
     character = characters[(curIdx + 1) % characters.length];
   } while(!canAct(character));
 
