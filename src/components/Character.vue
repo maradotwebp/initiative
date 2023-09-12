@@ -31,10 +31,13 @@ const bg: Record<CharacterState['type'], string> = {
 const bgImage = computed(() => bg[props.character.type]);
 const characterTypes = Object.keys(bg) as CharacterState['type'][];
 
-const trayOpen = ref(false);
+const trayOpen = ref(!!props.character.note);
+const canToggleTray = computed(() => !props.character.note);
 
 function toggleTray() {
-  trayOpen.value = !trayOpen.value;
+  if(canToggleTray.value) {
+    trayOpen.value = !trayOpen.value;
+  }
 }
 
 function refocus(evt: InputEvent) {
@@ -72,19 +75,24 @@ const excludedFromInitiative = computed(() => isDead.value);
           <Input class="hp-input" type="number" min="0" max="999" placeholder="max" v-model="character.hp.max" />
           HP
         </div>
-        <IconButton @click="toggleTray">
+        <IconButton :disabled="!canToggleTray" @click="toggleTray">
           <EllipsisVerticalIcon />
         </IconButton>
       </div>
       <img class="bg-icon" :src="bgImage" />
     </Box>
     <Transition>
-      <Box v-show="trayOpen" class="actions">
-        <IconButton title="Switch Weapon" @click="switchType">
-          <img :src="bgImage" />
-        </IconButton>
-        <slot name="actions" />
-      </Box>
+      <div class="tray" v-show="trayOpen">
+        <Box class="tray-item note">
+          <Input class="note-input" placeholder="Notes, Status Effects, ..." v-model="character.note" />
+        </Box>
+        <Box class="tray-item icons">
+          <IconButton title="Switch Weapon" @click="switchType">
+            <img :src="bgImage" />
+          </IconButton>
+          <slot name="actions" />
+        </Box>
+      </div>
     </Transition>
   </div>
 </template>
@@ -160,13 +168,19 @@ const excludedFromInitiative = computed(() => isDead.value);
   background-color: #ad3535;
 }
 
-
 .name-input {
   align-self: stretch;
   max-width: 16ch;
 }
 
-.actions {
+.tray {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2em;
+}
+
+.tray-item {
   border-width: 0 2px 2px 2px;
   width: fit-content;
   padding: 0.25em;
@@ -174,6 +188,20 @@ const excludedFromInitiative = computed(() => isDead.value);
 
   display: flex;
   gap: 0.1em;
+}
+
+.tray-item.note {
+  flex: 1 1 auto;
+}
+
+.tray-item.icons {
+  flex: 0 0 auto;
+}
+
+.note-input {
+  font-size: 0.8em;
+  width: 100%;
+  font-style: italic;
 }
 
 .right {
@@ -228,6 +256,10 @@ const excludedFromInitiative = computed(() => isDead.value);
     height: 6em;
     top: calc(50% - 3em);
     left: calc(50% - 3em);
+  }
+
+  .tray {
+    gap: 25%;
   }
 }
 </style>

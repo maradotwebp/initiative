@@ -87,7 +87,7 @@ function forward() {
           :darkMode="tracker.currentCharacter?.id === character.id"
         >
           <template #actions>
-            <div class="actions">
+            <div class="tray-item">
               <IconButton title="Copy" @click="emit('copy', character)">
                 <DocumentDuplicateIcon />
               </IconButton>

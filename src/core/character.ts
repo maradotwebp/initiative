@@ -7,6 +7,7 @@ export interface CharacterState {
     current: number;
     max: number;
   }
+  note: string;
 }
 
 /**
