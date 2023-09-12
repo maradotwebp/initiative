@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { CharacterState } from "../core/character.ts";
 import Character from "./Character.vue";
-import { PlusIcon, TrashIcon, DocumentDuplicateIcon, PlayIcon, StopIcon } from '@heroicons/vue/20/solid';
+import { PlusIcon, TrashIcon, DocumentDuplicateIcon, PlayIcon, StopIcon, BackwardIcon, ForwardIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
-import {computed, reactive, ref} from "vue";
+import {computed, reactive} from "vue";
 
 const props = defineProps<{
   characters: CharacterState[]
@@ -24,18 +24,14 @@ const sortedCharacters = computed(() => {
 interface TrackerState {
   inFight: boolean;
   characters: {
-    prev: CharacterState|undefined,
-    cur: CharacterState|undefined,
-    next: CharacterState|undefined
+    cur: CharacterState|undefined
   }
 }
 
 const trackerState = reactive<TrackerState>({
   inFight: false,
   characters: {
-    prev: undefined,
-    cur: undefined,
-    next: undefined
+    cur: undefined
   }
 });
 
@@ -49,19 +45,37 @@ function startFight() {
 
   trackerState.inFight = true;
   trackerState.characters = {
-    prev: undefined,
-    cur: sortedCharacters.value[0],
-    next: sortedCharacters.value[1]
+    cur: sortedCharacters.value[0]
   };
 }
 
 function stopFight() {
   trackerState.inFight = false;
   trackerState.characters = {
-    prev: undefined,
-    cur: undefined,
-    next: undefined
+    cur: undefined
   }
+}
+
+function backward() {
+  if(!trackerState.inFight) return;
+
+  const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
+  const previous = sortedCharacters.value[(curIdx - 1 + sortedCharacters.value.length) % sortedCharacters.value.length];
+
+  trackerState.characters = {
+    cur: previous
+  };
+}
+
+function forward() {
+  if(!trackerState.inFight) return;
+
+  const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
+  const next = sortedCharacters.value[(curIdx + 1) % sortedCharacters.value.length];
+
+  trackerState.characters = {
+    cur: next
+  };
 }
 </script>
 
@@ -69,9 +83,15 @@ function stopFight() {
   <div>
     <div class="title">
       <div>
+        <IconButton title="Previous" :disabled="!trackerState.inFight" @click="backward">
+          <BackwardIcon />
+        </IconButton>
         <IconButton :title="trackerState.inFight ? 'Stop' : 'Start'" @click="toggleInFight">
           <PlayIcon v-if="!trackerState.inFight" />
           <StopIcon v-else />
+        </IconButton>
+        <IconButton title="Next" :disabled="!trackerState.inFight" @click="forward">
+          <ForwardIcon />
         </IconButton>
       </div>
       <IconButton title="Add" @click="emit('add')">
