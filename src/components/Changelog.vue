@@ -29,9 +29,6 @@ const reversedChangelog = computed(() => {
             <p class="child" v-for="child of entry.children">{{child}}</p>
           </div>
         </div>
-        <span class="entry" v-if="changelog.length === 0">
-          <i>No events yet... End a turn to watch events end up here!</i>
-        </span>
       </TransitionGroup>
     </div>
     <IconButton title="Clear logs" class="trash" @click="emit('clear')">

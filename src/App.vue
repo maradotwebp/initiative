@@ -66,7 +66,7 @@ const title = titles[Math.floor(Math.random() * titles.length)];
           @changelog="addChangelogEntry"
       />
     </div>
-    <Changelog v-if="characters.length > 0" :changelog="changelog" @clear="clearChangelog" />
+    <Changelog v-if="changelog.length > 0" :changelog="changelog" @clear="clearChangelog" />
   </div>
 </template>
 
