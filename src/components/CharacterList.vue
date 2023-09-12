@@ -105,9 +105,4 @@ const sortedCharacters = computed(() => {
   position: absolute;
   width: min(calc(100vw - 1.2em), 60ch);
 }
-
-.actions {
-  display: flex;
-  gap: .1em;
-}
 </style>

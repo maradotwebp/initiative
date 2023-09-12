@@ -2,21 +2,23 @@
 import Input from "./Input.vue";
 import { ICharacter } from "../core/character.ts";
 import Box from "./Box.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import IconButton from "./IconButton.vue";
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
 import broadswordUrl from "../assets/broadsword.svg";
 import macheteUrl from "../assets/machete.svg";
 
+const props = defineProps<{
+  character: ICharacter
+}>();
+
 const bg: Record<ICharacter['type'], string> = {
   "sword": broadswordUrl,
   "machete": macheteUrl
 };
-
-const x = defineProps<{
-  character: ICharacter
-}>();
+const bgImage = computed(() => bg[props.character.type]);
+const characterTypes = Object.keys(bg) as ICharacter['type'][];
 
 const trayOpen = ref(false);
 
@@ -28,6 +30,12 @@ function refocus(evt: InputEvent) {
   setTimeout(() => {
     (evt.target as HTMLInputElement).focus();
   });
+}
+
+function switchType() {
+  const idx = characterTypes.findIndex(t => props.character.type === t);
+  const nextIdx = (idx + 1) % characterTypes.length;
+  props.character.type = characterTypes[nextIdx];
 }
 </script>
 
@@ -49,10 +57,13 @@ function refocus(evt: InputEvent) {
           <EllipsisVerticalIcon />
         </IconButton>
       </div>
-      <img class="bg-icon" :src="bg[character.type]" />
+      <img class="bg-icon" :src="bgImage" />
     </Box>
     <Transition>
       <Box v-show="trayOpen" class="actions">
+        <IconButton title="Switch Type" @click="switchType">
+          <img :src="bgImage" />
+        </IconButton>
         <slot name="actions" />
       </Box>
     </Transition>
@@ -112,8 +123,10 @@ function refocus(evt: InputEvent) {
   border-width: 0 2px 2px 2px;
   width: fit-content;
   padding: 0.25em;
-
   margin: 0 0.6em;
+
+  display: flex;
+  gap: 0.1em;
 }
 
 .right {
