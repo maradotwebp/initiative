@@ -34,6 +34,7 @@ function toggleInFight() {
   } else {
     tracker.value = startedFight(sortedCharacters.value);
     charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
+    emit('changelog', { msg: "Onwards to victory! Started the fight.", children: [] });
   }
 }
 

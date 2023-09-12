@@ -2,27 +2,38 @@
 import {ChangelogEntry} from "../core/changelog";
 import IconButton from "./IconButton.vue";
 import { TrashIcon } from '@heroicons/vue/24/solid';
+import {computed} from "vue";
 
-defineProps<{
+const props = defineProps<{
   changelog: ChangelogEntry[]
 }>();
 
 const emit = defineEmits<{
   clear: []
 }>();
+
+const reversedChangelog = computed(() => {
+  const arr = [...props.changelog];
+  arr.reverse();
+  return arr;
+});
 </script>
 
 <template>
   <div class="changelog">
-    <TransitionGroup name="list">
-      <div class="entry" v-for="(entry, index) of changelog" :key="index">
-        <div class="msg">{{entry.msg}}</div>
-        <div class="children">
-          <p class="child" v-for="child of entry.children">{{child}}</p>
+    <div ref="scroll" class="scroll">
+      <TransitionGroup name="list">
+        <div class="entry" v-for="(entry, index) of reversedChangelog" :key="index">
+          <div class="msg">{{entry.msg}}</div>
+          <div class="children">
+            <p class="child" v-for="child of entry.children">{{child}}</p>
+          </div>
         </div>
-      </div>
-    </TransitionGroup>
-    <span class="entry" v-if="changelog.length === 0"><i>Nothing here yet...</i></span>
+        <span class="entry" v-if="changelog.length === 0">
+          <i>No events yet... End a turn to watch events end up here!</i>
+        </span>
+      </TransitionGroup>
+    </div>
     <IconButton title="Clear logs" class="trash" @click="emit('clear')">
       <TrashIcon />
     </IconButton>
@@ -32,19 +43,24 @@ const emit = defineEmits<{
 <style>
 .changelog {
   background-color: #f9f9f9;
-  padding: .6em;
-
-  height: 12em;
-  overflow: auto;
-  resize: vertical;
 
   position: relative;
+}
+
+.scroll {
+  padding: .6em;
+  overflow-y: scroll;
+  height: 12em;
+  resize: vertical;
+
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .trash {
   position: absolute;
   top: 1em;
-  right: 1em;
+  right: 2em;
 }
 
 .entry {

@@ -36,7 +36,7 @@ function copyCharacter(character: CharacterState) {
 const changelog = useLocalStorage<ChangelogEntry[]>("changelog", []);
 
 function addChangelogEntry(entry: ChangelogEntry) {
-  changelog.value = [entry, ...changelog.value];
+  changelog.value.push(entry);
 }
 
 function clearChangelog() {
@@ -55,14 +55,16 @@ const title = titles[Math.floor(Math.random() * titles.length)];
 
 <template>
   <div class="main">
-    <h1>{{title}}</h1>
-    <CharacterList
-      :characters="characters"
-      @add="addCharacter"
-      @delete="deleteCharacter"
-      @copy="copyCharacter"
-      @changelog="addChangelogEntry"
-    />
+    <div>
+      <h1>{{title}}</h1>
+      <CharacterList
+          :characters="characters"
+          @add="addCharacter"
+          @delete="deleteCharacter"
+          @copy="copyCharacter"
+          @changelog="addChangelogEntry"
+      />
+    </div>
     <Changelog :changelog="changelog" @clear="clearChangelog" />
   </div>
 </template>
@@ -72,6 +74,10 @@ const title = titles[Math.floor(Math.random() * titles.length)];
   max-width: 60ch;
   margin: auto;
   padding: 1.2em 0.6em;
+}
+
+.main > * + * {
+  margin-top: 2em;
 }
 
 h1 {
