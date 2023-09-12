@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import Input from "./Input.vue";
-import { ICharacter } from "../core/character.ts";
+import { CharacterState } from "../core/character.ts";
 import Box from "./Box.vue";
 import {computed, ref} from "vue";
 import IconButton from "./IconButton.vue";
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps<{
-  character: ICharacter
+  character: CharacterState
+  darkMode?: boolean
 }>();
 
 import axeUrl from "../assets/axe.svg";
@@ -18,7 +19,7 @@ import macheteUrl from "../assets/machete.svg";
 import swordUrl from "../assets/sword.svg";
 import wandUrl from "../assets/wand.svg";
 
-const bg: Record<ICharacter['type'], string> = {
+const bg: Record<CharacterState['type'], string> = {
   "axe": axeUrl,
   "bow": bowUrl,
   "club": clubUrl,
@@ -28,7 +29,7 @@ const bg: Record<ICharacter['type'], string> = {
   "wand": wandUrl
 };
 const bgImage = computed(() => bg[props.character.type]);
-const characterTypes = Object.keys(bg) as ICharacter['type'][];
+const characterTypes = Object.keys(bg) as CharacterState['type'][];
 
 const trayOpen = ref(false);
 
@@ -51,7 +52,7 @@ function switchType() {
 
 <template>
   <div class="wrapper">
-    <Box class="character">
+    <Box class="character" :class="{ dark: darkMode ?? false }">
       <div class="left">
         <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" @input="refocus" />
         <Input class="name-input" maxlength="20" v-model="character.name" />
@@ -104,6 +105,10 @@ function switchType() {
   overflow: hidden;
 }
 
+.character.dark {
+  filter: invert(90%);
+}
+
 .bg-icon {
   position: absolute;
   opacity: 10%;
@@ -111,6 +116,10 @@ function switchType() {
   top: calc(50% - 5em);
   left: calc(50% - 5em);
   z-index: -1;
+}
+
+.dark .bg-icon {
+  color: white;
 }
 
 .left {

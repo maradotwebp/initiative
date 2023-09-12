@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {useLocalStorage} from "./core/useLocalStorage.ts";
-import {ICharacter} from "./core/character.ts";
+import {CharacterState} from "./core/character.ts";
 import CharacterList from "./components/CharacterList.vue";
 
-const characters = useLocalStorage<ICharacter[]>("characters", []);
+const characters = useLocalStorage<CharacterState[]>("characters", []);
 
 function addCharacter() {
   characters.value.push({
@@ -14,12 +14,12 @@ function addCharacter() {
   });
 }
 
-function deleteCharacter(character: ICharacter) {
+function deleteCharacter(character: CharacterState) {
   const idx = characters.value.findIndex(char => char === character);
   characters.value.splice(idx, 1);
 }
 
-function copyCharacter(character: ICharacter) {
+function copyCharacter(character: CharacterState) {
   characters.value.push({ ...character });
 }
 

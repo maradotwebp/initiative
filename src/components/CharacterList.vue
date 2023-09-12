@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { ICharacter as ICharacter } from "../core/character.ts";
+import type { CharacterState } from "../core/character.ts";
 import Character from "./Character.vue";
-import { PlusIcon, TrashIcon, DocumentDuplicateIcon } from '@heroicons/vue/20/solid';
+import { PlusIcon, TrashIcon, DocumentDuplicateIcon, PlayIcon, StopIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
-import {computed} from "vue";
+import {computed, reactive, ref} from "vue";
 
 const props = defineProps<{
-  characters: ICharacter[]
+  characters: CharacterState[]
 }>();
 
 const emit = defineEmits<{
   add: []
-  delete: [character: ICharacter]
-  copy: [character: ICharacter]
+  delete: [character: CharacterState]
+  copy: [character: CharacterState]
 }>();
 
 const sortedCharacters = computed(() => {
@@ -20,12 +20,60 @@ const sortedCharacters = computed(() => {
   arr.sort((a, b) => b.initiative - a.initiative);
   return arr;
 });
+
+interface TrackerState {
+  inFight: boolean;
+  characters: {
+    prev: CharacterState|undefined,
+    cur: CharacterState|undefined,
+    next: CharacterState|undefined
+  }
+}
+
+const trackerState = reactive<TrackerState>({
+  inFight: false,
+  characters: {
+    prev: undefined,
+    cur: undefined,
+    next: undefined
+  }
+});
+
+function toggleInFight() {
+  trackerState.inFight ? stopFight() : startFight();
+}
+
+function startFight() {
+  // Don't start if there's not enough characters
+  if(sortedCharacters.value.length < 2) return;
+
+  trackerState.inFight = true;
+  trackerState.characters = {
+    prev: undefined,
+    cur: sortedCharacters.value[0],
+    next: sortedCharacters.value[1]
+  };
+}
+
+function stopFight() {
+  trackerState.inFight = false;
+  trackerState.characters = {
+    prev: undefined,
+    cur: undefined,
+    next: undefined
+  }
+}
 </script>
 
 <template>
   <div>
     <div class="title">
-      <div>---</div>
+      <div>
+        <IconButton :title="trackerState.inFight ? 'Stop' : 'Start'" @click="toggleInFight">
+          <PlayIcon v-if="!trackerState.inFight" />
+          <StopIcon v-else />
+        </IconButton>
+      </div>
       <IconButton title="Add" @click="emit('add')">
         <PlusIcon />
       </IconButton>
@@ -35,7 +83,12 @@ const sortedCharacters = computed(() => {
 
     <div class="list">
       <TransitionGroup name="list">
-        <Character v-for="character in sortedCharacters" :key="character" :character="character" :bgIconUrl="bgIconUrl">
+        <Character
+          v-for="character in sortedCharacters"
+          :key="character"
+          :character="character"
+          :darkMode="trackerState.characters.cur === character"
+        >
           <template #actions>
             <div class="actions">
               <IconButton title="Copy" @click="emit('copy', character)">
