@@ -33,6 +33,10 @@ export function compileChangelogChildren(before: CharacterState[], after: Charac
       messages.push(`${afterChar.name} received ${beforeChar.hp.current - afterChar.hp.current} points of damage.`);
     }
 
+    if(beforeChar.note !== afterChar.note) {
+      messages.push(`${afterChar.name} changed note to '${afterChar.note}'.`);
+    }
+
     if(beforeChar.initiative !== afterChar.initiative) {
       messages.push(`${afterChar.name} changed initiative from ${beforeChar.initiative} to ${afterChar.initiative}.`);
     }
