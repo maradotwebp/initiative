@@ -14,7 +14,7 @@ export function startedFight(characters: CharacterState[]): TrackerState {
 
   return {
     inFight: true,
-    currentCharacter: characters[0]
+    currentCharacter: characters.find(canAct)
   }
 }
 
