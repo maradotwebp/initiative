@@ -14,7 +14,8 @@ function addCharacter() {
     name: "Character",
     type: "sword",
     initiative: 10,
-    hp: { current: 4, max: 4 }
+    hp: { current: 10, max: 10 },
+    note: ""
   });
 }
 
