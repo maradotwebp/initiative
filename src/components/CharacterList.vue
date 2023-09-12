@@ -3,7 +3,7 @@ import type { CharacterState } from "../core/character";
 import Character from "./Character.vue";
 import { PlusIcon, TrashIcon, DocumentDuplicateIcon, PlayIcon, StopIcon, BackwardIcon, ForwardIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {next, previous, startedFight, stoppedFight, TrackerState} from "../core/tracker.ts";
 import {ChangelogEntry, compileChangelogChildren} from "../core/changelog.ts";
 import {toRawDeep} from "../core/toRawDeep.ts";
@@ -44,17 +44,25 @@ function toggleInFight() {
 
 function backward() {
   tracker.value = previous(tracker.value, sortedCharacters.value);
-  emit('changelog', { msg: "Went back a turn.", children: [] });
+  if(tracker.value.inFight) {
+    emit('changelog', { msg: "Went back a turn.", children: [] });
+  } else {
+    emit('changelog', { msg: "All done! Stopped the fight.", children: [] });
+  }
 }
 
 function forward() {
   const characterName = tracker.value.currentCharacter?.name;
   tracker.value = next(tracker.value, sortedCharacters.value);
-  const before = charactersBeforeEndOfTurn.value;
-  const after = props.characters;
-  const changelog = compileChangelogChildren(before, after);
-  emit('changelog', { msg: `${characterName} ended their turn.`, children: changelog });
-  charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
+  if(tracker.value.inFight) {
+    const before = charactersBeforeEndOfTurn.value;
+    const after = props.characters;
+    const changelog = compileChangelogChildren(before, after);
+    emit('changelog', { msg: `${characterName} ended their turn.`, children: changelog });
+    charactersBeforeEndOfTurn.value = structuredClone(toRawDeep(props.characters));
+  } else {
+    emit('changelog', { msg: "All done! Stopped the fight.", children: [] });
+  }
 }
 </script>
 
