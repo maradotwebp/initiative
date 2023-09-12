@@ -54,7 +54,7 @@ function switchType() {
     <Box class="character">
       <div class="left">
         <Input class="initiative-input" type="number" min="0" max="99" placeholder="ini" v-model="character.initiative" @input="refocus" />
-        <Input class="name-input" maxlength="10" v-model="character.name" />
+        <Input class="name-input" maxlength="20" v-model="character.name" />
       </div>
       <div class="right">
         <div class="hp">
@@ -126,7 +126,7 @@ function switchType() {
 
 .name-input {
   align-self: stretch;
-  max-width: 18ch;
+  max-width: 16ch;
 }
 
 .actions {
