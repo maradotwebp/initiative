@@ -7,3 +7,10 @@ export interface CharacterState {
     max: number;
   }
 }
+
+/**
+ * Returns whether a character can act on their turn.
+ */
+export function canAct(character: CharacterState): boolean {
+  return character.hp.current > 0;
+}

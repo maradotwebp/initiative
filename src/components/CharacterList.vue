@@ -3,7 +3,8 @@ import type { CharacterState } from "../core/character.ts";
 import Character from "./Character.vue";
 import { PlusIcon, TrashIcon, DocumentDuplicateIcon, PlayIcon, StopIcon, BackwardIcon, ForwardIcon } from '@heroicons/vue/20/solid';
 import IconButton from "./IconButton.vue";
-import {computed, reactive} from "vue";
+import {computed, ref} from "vue";
+import {next, previous, startedFight, stoppedFight, TrackerState} from "../core/tracker.ts";
 
 const props = defineProps<{
   characters: CharacterState[]
@@ -21,64 +22,18 @@ const sortedCharacters = computed(() => {
   return arr;
 });
 
-interface TrackerState {
-  inFight: boolean;
-  characters: {
-    cur: CharacterState|undefined
-  }
-}
-
-const trackerState = reactive<TrackerState>({
-  inFight: false,
-  characters: {
-    cur: undefined
-  }
-});
+const tracker = ref<TrackerState>(stoppedFight());
 
 function toggleInFight() {
-  trackerState.inFight ? stopFight() : startFight();
-}
-
-function startFight() {
-  // Don't start if there's not enough characters
-  if(sortedCharacters.value.length < 2) return;
-  if(sortedCharacters.value.every(c => c.hp.current === 0)) return;
-
-  trackerState.inFight = true;
-  trackerState.characters = {
-    cur: sortedCharacters.value[0]
-  };
-}
-
-function stopFight() {
-  trackerState.inFight = false;
-  trackerState.characters = {
-    cur: undefined
-  }
+  tracker.value = tracker.value.inFight ? stoppedFight() : startedFight(sortedCharacters.value);
 }
 
 function backward() {
-  if(!trackerState.inFight) return;
-  if(sortedCharacters.value.every(c => c.hp.current === 0)) return stopFight();
-
-  let prev: CharacterState|undefined;
-  do {
-    const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
-    prev = sortedCharacters.value[(curIdx - 1 + sortedCharacters.value.length) % sortedCharacters.value.length];
-    trackerState.characters = { cur: prev };
-  } while(!prev || prev.hp.current === 0);
+  tracker.value = previous(tracker.value, sortedCharacters.value);
 }
 
 function forward() {
-  if(!trackerState.inFight) return;
-  if(sortedCharacters.value.every(c => c.hp.current === 0)) return stopFight();
-
-  let next: CharacterState|undefined;
-  do {
-    const curIdx = sortedCharacters.value.findIndex(c => c === trackerState.characters.cur);
-    next = sortedCharacters.value[(curIdx + 1) % sortedCharacters.value.length];
-    trackerState.characters = { cur: next };
-  } while(!next || next.hp.current === 0);
+  tracker.value = next(tracker.value, sortedCharacters.value);
 }
 </script>
 
@@ -86,14 +41,14 @@ function forward() {
   <div>
     <div class="title">
       <div>
-        <IconButton title="Previous" :disabled="!trackerState.inFight" @click="backward">
+        <IconButton title="Previous" :disabled="!tracker.inFight" @click="backward">
           <BackwardIcon />
         </IconButton>
-        <IconButton :title="trackerState.inFight ? 'Stop' : 'Start'" @click="toggleInFight">
-          <PlayIcon v-if="!trackerState.inFight" />
+        <IconButton :title="tracker.inFight ? 'Stop' : 'Start'" @click="toggleInFight">
+          <PlayIcon v-if="!tracker.inFight" />
           <StopIcon v-else />
         </IconButton>
-        <IconButton title="Next" :disabled="!trackerState.inFight" @click="forward">
+        <IconButton title="Next" :disabled="!tracker.inFight" @click="forward">
           <ForwardIcon />
         </IconButton>
       </div>
@@ -110,7 +65,7 @@ function forward() {
           v-for="character in sortedCharacters"
           :key="character"
           :character="character"
-          :darkMode="trackerState.characters.cur === character"
+          :darkMode="tracker.currentCharacter === character"
         >
           <template #actions>
             <div class="actions">
